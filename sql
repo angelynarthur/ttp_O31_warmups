@@ -3,7 +3,13 @@
 
 
 
-
+WITH order_totals as (
+SELECT customer.customer_id, SUM(payment.amount) as total
+FROM payment
+JOIN customer ON customer.customer_id = payment.customer_id
+GROUP BY customer.customer_id)
+SELECT AVG(total), stddev_samp(total), COUNT(total)
+FROM order_totals;  
 
 
 -- 2) Your boss is absolutely certain (like 99%) that his new marketing strategy will increase
@@ -17,10 +23,24 @@
 -- average spending per year is more than $100. 
 -- (USE at least 2 significant digits for your analysis)
 
--- Is the plan going to work? 
+population mean	100			
+population std	25.2321			
+sample size (n)	599			
+alpha (significance level) 0.01	(99% confidence)		
+sample mean	102.3573			
+				
+         			H0 (Null hypothesis) spending >= 100
+standard error	1.0310		HA (Alternative hypothesis) spending <100
+threshold (lower limit) 97.6016			
+p-value	0.9889			
+	0.0111	
+		
+The p-value slightly exceeds the significance level, so fail to reject the null hypothesis. 			
+
+-- Is the plan going to work? Yes, the p-value slightly exceeds the significance level with a value of 0.0111.
 -- If not at 99% confidence, what about 95%?
--- If yes at 99%, what about 99.5%?
--- At which level of confidence can he tell the CEO that the plan is going to work?
+-- If yes at 99%, what about 99.5%? Yes, The p-value is greater than the significance level so  fail to reject the null hypothesis. (P-value is 0.0111, significance level is 0.005)	
+-- At which level of confidence can he tell the CEO that the plan is going to work? 99%
 
 -- BONUS:
 -- If you still have time, get the count, average, and standard deviation of customer spending
